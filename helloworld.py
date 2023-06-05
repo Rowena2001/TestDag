@@ -7,7 +7,7 @@ from ray.serve.deployment_graph import RayServeDAGHandle
     }
 )
 def f(*args):
-    return "wonderful world"
+    return "hello world! \n"
 
 
 @serve.deployment(
