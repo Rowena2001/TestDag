@@ -9,6 +9,7 @@ from starlette.requests import Request
 import ray
 from ray import serve
 from ray.serve.deployment_graph import RayServeDAGHandle
+from ray.serve.drivers import DAGDriver
 
 from transformers import pipeline
 
@@ -32,13 +33,5 @@ class Translator:
         english_text: str = await http_request.json()
         return self.translate(english_text)
 
-@serve.deployment(ray_actor_options={"num_cpus": 0.1})
-class BasicDriver:
-    def __init__(self, dag: RayServeDAGHandle):
-        self.dag = dag
-
-    async def __call__(self):
-        return await (await self.dag.remote())
-
 translator = Translator.bind()
-DagNode = BasicDriver.bind(translator)
+dag = DAGDriver.bind(translator)
