@@ -10,6 +10,7 @@ import ray
 from ray import serve
 from ray.serve.deployment_graph import RayServeDAGHandle
 from ray.serve.drivers import DAGDriver
+from ray.serve.http_adapters import json_request
 
 from transformers import pipeline
 
@@ -34,4 +35,4 @@ class Translator:
         return self.translate(english_text)
 
 translator = Translator.bind()
-dag = DAGDriver.bind(translator)
+dag = DAGDriver.bind(translator, http_adapter=json_request)
