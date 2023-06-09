@@ -23,18 +23,25 @@ class Translator:
 
         return translation
 
-    # async def __call__(self, http_request: Request) -> str:
-    #     english_text: str = await http_request.json()
-    #     return self.translate(english_text)
+    async def __call__(self, http_request: Request) -> str:
+        english_text: str = await http_request.json()
+        # print(f"Received input: {english_text}")
+        translation = self.translate(english_text)
+        # print(f"Translated output: {translation}")
+        return translation
 
-@serve.deployment(ray_actor_options={"num_cpus": 0.1,})
+@serve.deployment(ray_actor_options={"num_cpus": 0.1})
 class BasicDriver:
     def __init__(self, dag: RayServeDAGHandle):
         self.dag = dag
 
-    async def __call__(self):
-        return await (await self.dag.remote())
+    async def __call__(self, http_request: Request):
+        object_ref = await self.dag.remote(http_request)
+        # print(f"Received object reference: {object_ref}")
+        result = await object_ref
+        # print(f"Received result: {result}")
+        return result
 
 translator_app = Translator.bind()
-translation = translator_app.translate.bind("Hello world!")
-DagNode = BasicDriver.bind(translation)
+# translation = translator_app.translate.bind()
+DagNode = BasicDriver.bind(translator_app)
