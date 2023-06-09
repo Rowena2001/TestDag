@@ -28,3 +28,4 @@ class Translator:
 
 
 translator_app = Translator.bind()
+serve.run(translator_app)
