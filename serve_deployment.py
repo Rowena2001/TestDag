@@ -3,6 +3,7 @@ from starlette.requests import Request
 
 import ray
 from ray import serve
+from ray.serve.deployment_graph import RayServeDAGHandle
 
 from transformers import pipeline
 
