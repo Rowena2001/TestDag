@@ -25,9 +25,7 @@ class Translator:
 
     async def __call__(self, http_request: Request) -> str:
         english_text: str = await http_request.json()
-        # print(f"Received input: {english_text}")
         translation = self.translate(english_text)
-        # print(f"Translated output: {translation}")
         return translation
 
 @serve.deployment(ray_actor_options={"num_cpus": 0.1})
@@ -37,9 +35,7 @@ class BasicDriver:
 
     async def __call__(self, http_request: Request):
         object_ref = await self.dag.remote(http_request)
-        # print(f"Received object reference: {object_ref}")
         result = await object_ref
-        # print(f"Received result: {result}")
         return result
 
 translator_app = Translator.bind()
