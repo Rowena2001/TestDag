@@ -7,8 +7,6 @@ from ray.serve.deployment_graph import RayServeDAGHandle
 
 from transformers import pipeline
 
-ray.init(runtime_env={"pip": ["transformers"]})
-
 @serve.deployment(num_replicas=2, ray_actor_options={"num_cpus": 0.2, "num_gpus": 0})
 class Translator:
     def __init__(self):
