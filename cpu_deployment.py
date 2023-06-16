@@ -7,13 +7,12 @@ from ray.serve.deployment_graph import RayServeDAGHandle
 
 from transformers import pipeline
 
-@serve.deployment(num_replicas=1, ray_actor_options={"num_cpus": 0.2})
+
+@serve.deployment(num_replicas=2, ray_actor_options={"num_cpus": 0.2, "num_gpus": 0})
 class Translator:
     def __init__(self):
         # Load model
-        print("hello1")
         self.model = pipeline("translation_en_to_fr", model="t5-small")
-        print("hello2")
 
     def translate(self, text: str) -> str:
         # Run inference
@@ -29,7 +28,7 @@ class Translator:
         translation = self.translate(english_text)
         return translation
 
-@serve.deployment(ray_actor_options={"num_cpus": 0.2})
+@serve.deployment(ray_actor_options={"num_cpus": 0.1})
 class BasicDriver:
     def __init__(self, dag: RayServeDAGHandle):
         self.dag = dag
