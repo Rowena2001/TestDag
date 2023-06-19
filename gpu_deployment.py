@@ -13,7 +13,7 @@ import os
 class Translator:
     def __init__(self):
         # Load model
-        self.model = pipeline("translation_en_to_fr", model="t5-small")
+        self.model = pipeline("translation_en_to_fr", model="t5-small", device_map="auto")
         print("hello")
 
     def translate(self, text: str) -> str:
