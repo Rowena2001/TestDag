@@ -23,6 +23,10 @@ class Translator:
         # Post-process output to return only the translation text
         translation = model_output[0]["translation_text"]
 
+        # Print GPU information
+        print("ray.get_gpu_ids(): {}".format(ray.get_gpu_ids()))
+        print("CUDA_VISIBLE_DEVICES: {}".format(os.environ["CUDA_VISIBLE_DEVICES"]))
+
         return translation
 
     async def __call__(self, http_request: Request) -> str:
