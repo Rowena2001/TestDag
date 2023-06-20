@@ -30,7 +30,7 @@ class Translator:
         translation = self.translate(english_text)
         return translation
 
-@serve.deployment(ray_actor_options={"num_cpus": 0.2})
+@serve.deployment(ray_actor_options={"num_gpus": 0.2})
 class BasicDriver:
     def __init__(self, dag: RayServeDAGHandle):
         self.dag = dag
